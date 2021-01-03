@@ -13,17 +13,25 @@ class App extends Component {
   };
 
   handleIncrement = (habit) => {
-    const habits = [...this.state.habits];
-    const index = habits.indexOf(habit);
-    habits[index].count++;
+    const habits = this.state.habits.map((item) => {
+      if (item.id === habit.id) {
+        return { ...habit, count: habit.count + 1 }; /*...habit 기존 해빗과 key, value를 동일하게 새로 복사해서 새 오브젝트로 생성*/
+      } else {
+        return item;
+      }
+    });
     this.setState({ habits }); /* key : value -> 1개로 통합 가능*/
   };
 
   handleDecrement = (habit) => {
-    const habits = [...this.state.habits];
-    const index = habits.indexOf(habit);
-    const count = habits[index].count - 1;
-    habits[index].count = count < 0 ? 0 : count;
+    const habits = this.state.habits.map((item) => {
+      if (item.id === habit.id) {
+        const count = habit.count - 1;
+        return { ...habit, count: count < 0 ? 0 : count }; /*...habit 기존 해빗과 key, value를 동일하게 새로 복사해서 새 오브젝트로 생성*/
+      } else {
+        return item;
+      }
+    });
     this.setState({ habits });
   };
 
@@ -39,8 +47,11 @@ class App extends Component {
 
   handleReset = () => {
     const habits = this.state.habits.map((habit) => {
-      habit.count = 0;
-      return habit;
+      if (habit.count !== 0) {
+        return { ...habit, count: 0 };
+      } else {
+        return habit;
+      }
     });
     this.setState({ habits });
   };
